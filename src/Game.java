@@ -126,6 +126,18 @@ public class Game extends JPanel{
                 "space");
         getActionMap().put("space",
                 space);
+                
+        // ---------- ESCAPE ----------     
+        Action esc = new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                start = false;
+                reset();
+            }
+        };
+        getInputMap().put(KeyStroke.getKeyStroke("ESCAPE"),
+                "ESC");
+        getActionMap().put("ESC",
+                esc);
     }
 
     public void update(){
