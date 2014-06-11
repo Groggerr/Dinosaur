@@ -22,7 +22,11 @@ public class Game extends JPanel{
     //variables for the menu
     int x=420;
     int dx=-2;
-
+    
+    //variables for score
+    private long startTime;
+    private String endTime;
+    private int score;
 
     public Game(){
 
@@ -112,11 +116,13 @@ public class Game extends JPanel{
 
                 if(!start){
                     start=true;
-
+                    startTime=System.currentTimeMillis();
+                    start();
                 }else if(!gameover){
                     dino.jump();
                 } else {
                     reset();
+                    startTime=System.currentTimeMillis();
                     gameover=false;
                 }
 
@@ -126,12 +132,13 @@ public class Game extends JPanel{
                 "space");
         getActionMap().put("space",
                 space);
-                
-        // ---------- ESCAPE ----------     
+        
+        // ----------- ESCAPE ------------
         Action esc = new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
                 start = false;
                 reset();
+                gameover = false;
             }
         };
         getInputMap().put(KeyStroke.getKeyStroke("ESCAPE"),
@@ -147,13 +154,15 @@ public class Game extends JPanel{
         floor.update();
         if(!dino.isAlive()){
             gameover=true;
+            endTime = ((((System.currentTimeMillis()-startTime)/1000) + ":" + ((System.currentTimeMillis()-startTime)%1000)));
         }
         }
     }
     public void start(){
-
+    	startTime=System.currentTimeMillis();
     }
     public void reset(){
+    	startTime=System.currentTimeMillis();
         dino.reset();
         floor.choices=5;
         floor.bottom.clear();
@@ -179,8 +188,9 @@ public class Game extends JPanel{
         else
         drawGame(g);
 
-
-    }
+        
+        
+        		}
 
     public void drawMenu(Graphics g){
 
@@ -198,7 +208,7 @@ public class Game extends JPanel{
     }
     public void drawGame(Graphics g){
         floor.draw(g); //draws the world
-
+        
         // Make seeGrid true in order to see the grid in the game.
         boolean seeGrid = false;
         if(seeGrid){
@@ -220,7 +230,15 @@ public class Game extends JPanel{
         g.drawString("DINO RUNNER GAME DEVELOPMENT VERSION",20,20);
         g.drawString("DINOSAUR STATUS: "+dino.isAlive(),700,20); // prints true if alive, otherwise false
         g.drawString("by: Diego Gonzalez, Mike Roome Christian Illes & Ben Sentiff",20,40); // the crew. ;)
-        g.dispose();
+        if(dino.isAlive())
+        {
+        	g.drawString(((((System.currentTimeMillis()-startTime)/1000) + ":" + ((System.currentTimeMillis()-startTime)%1000))),450,200);
+        }
+        else
+        {
+        	g.drawString("SCORE... ", 440, 250);
+        	g.drawString((("    " + endTime)),490,250);
+        }
     }
     public void drawEnd(Graphics g){
         g.setColor(Color.WHITE);
